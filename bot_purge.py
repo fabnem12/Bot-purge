@@ -9,7 +9,7 @@ from random import randint
 from constantes import TOKEN #le token du bot pour se connecter à discord
 
 if os.path.exists("derniereActivite.p"):
-    derniereActivite = pickle.load(open("derniereActivite.p", "rb").)
+    derniereActivite = pickle.load(open("derniereActivite.p", "rb"))
 else:
     derniereActivite = dict()
     #dictionnaire qui à chaque membre du serveur associe sa date de dernière activité
