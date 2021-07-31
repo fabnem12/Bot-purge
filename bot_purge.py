@@ -9,7 +9,7 @@ from random import randint
 from constantes import TOKEN #le token du bot pour se connecter à discord
 
 if os.path.exists("derniereActivite.p"):
-    derniereActivite = pickle.load(open("derniereActivite.p", "rb"))
+    derniereActivite = pickle.load(open("derniereActivite.p", "rb").)
 else:
     derniereActivite = dict()
     #dictionnaire qui à chaque membre du serveur associe sa date de dernière activité
@@ -40,7 +40,7 @@ def main():
 
     @bot.command(name = "reset")
     async def reset(ctx):
-        if ctx.author.id != ctx.guild.owner_id or ctx.author.guild_permissions.administrator: return
+        if ctx.author.id != ctx.guild.owner_id or not ctx.author.guild_permissions.administrator: return
         await ctx.message.add_reaction("🕰️")
 
         derniereActivite.clear()
@@ -58,7 +58,7 @@ def main():
 
     @bot.command(name = "moins_actifs")
     async def moinsActifs(ctx):
-        if ctx.author.id != ctx.guild.owner_id or ctx.author.guild_permissions.administrator: return
+        if ctx.author.id != ctx.guild.owner_id or not ctx.author.guild_permissions.administrator: return
 
         triParDateActivite = sorted(derniereActivite.items(), key=lambda x: x[1])
         laMaintenant = maintenant()
