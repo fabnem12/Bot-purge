@@ -49,7 +49,7 @@ def main():
         for salon in ctx.guild.text_channels:
             try:
                 async for message in salon.history(limit = None):
-                    await ajoutActivite(message.author.id, message.created_at, False)
+                    ajoutActivite(message.author.id, message.created_at, False)
             except Exception as e: #le bot n'a pas le droit de lire ce salon, on passe au suivant
                 pass
 
@@ -87,32 +87,28 @@ def main():
         if ctx.author.id != ctx.guild.owner_id: return
         laMaintenant = maintenant()
 
-        for idMembre, dateActivite in list(derniereActivite.items()):
+        for idMembre, dateActivite in derniereActivite.items():
             if laMaintenant - dateActivite > timedelta(days = 90): #dernière activité il y a plus de 3 mois, on purge !
                 try:
                     membre = await ctx.guild.fetch_member(idMembre)
                 except: #le membre n'existe pas : a quitté le serveur
-                    del derniereActivite[idMembre]
-                    save()
+                    pass
                 else:
                     await membre.kick(reason = "Aucune activité sur le serveur depuis plus de 3 mois")
 
     @bot.command(name = "purgeRole")
-    async def purgeRetraitRole(ctx, roleARetirerPurge):
+    async def purgeRetraitRole(ctx, roleARetirerPurge: discord.Role):
         if ctx.author.id != ctx.guild.owner_id: return
         laMaintenant = maintenant()
 
-        role = ctx.get_role(roleARetirerPurge)
-
-        for idMembre, dateActivite in list(derniereActivite.items()):
+        for idMembre, dateActivite in derniereActivite.items():
             if laMaintenant - dateActivite > timedelta(days = 90): #dernière activité il y a plus de 3 mois, on purge !
                 try:
                     membre = await ctx.guild.fetch_member(idMembre)
                 except: #le membre n'existe pas : a quitté le serveur
-                    del derniereActivite[idMembre]
-                    save()
+                    pass
                 else:
-                    await membre.remove_roles(role)
+                    await membre.remove_roles(roleARetirerPurge)
 
     loop = asyncio.get_event_loop()
     loop.create_task(bot.start(TOKEN))
